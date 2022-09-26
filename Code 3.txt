@@ -1,0 +1,177 @@
+#include <iostream>
+
+using namespace std;
+
+
+class Atm{
+    
+    float balance;
+    int userid,pin;
+    
+    public:
+    void setvalues(int id,int p,float bal){
+        userid = id;
+        pin = p;
+        balance = bal;
+    }
+    
+    bool authorization(){
+        int aid,apin;
+        int count = 0;
+        bool isPinValid = true;
+        
+        while(isPinValid){
+            count++;
+            cout <<"Enter PIN: ";
+            cin>> apin;
+            if(apin == pin){
+                isPinValid = false;
+            }
+            else if(count == 3){
+                return false;
+            }
+            else{
+                cout << "Invalid PIN! Try again."<<endl;
+            }
+            
+        }
+        
+        return true;
+        
+    }
+    
+    int options(){
+        int option = -1;
+        
+        cout << "Main menu:" << endl;
+	    cout << "	1 - Check balance" << endl;
+    	cout << "	2 - Withdraw cash" << endl;
+    	cout << "	3 - Deposit cash" << endl;
+    	cout << "	4 - Exit" << endl;
+    	cout << "Enter a choice: " << endl;
+    	cin >> option;
+        
+        return option;
+        
+    }
+    
+    void checkBalance(){
+        cout << "Balance: "<<balance<<endl;
+    }
+    
+    void withdrawCash(){
+        float amount = 0;
+        cout<<"Enter the amount: ";
+        cin>>amount;
+        
+        try{
+            if(amount >= 0){
+                if(amount <= balance){
+                balance = balance - amount;
+                cout << "Transaction completed"<<endl;
+                }
+                else{
+                    cout << "Your balance is: "<<balance<<" . You can't withdraw : "<<amount<<endl;
+                }
+            }
+            else{
+                throw(amount);
+            }
+        }
+        catch(float n){
+            cout<<"Please enter valid amount"<<endl;
+        }
+        
+    }
+    
+    void depositCash(){
+        float amount = 0;
+        cout<<"Enter the amount: ";
+        cin>>amount;
+        try{
+            if(amount>=0){
+                balance = balance+amount;
+                cout<<"Transaction completed"<<endl;
+            }
+            else{
+                throw(amount);
+            }
+        }
+        catch(float n){
+            cout<<"Please enter valid amount"<<endl;
+        }
+        
+    }
+    
+};
+
+int main(){
+    int userid1 = 123456;
+    int userpwd1 = 1234;
+    int userbal1 = 50000;
+    int userid2 = 654321;
+    int userpwd2 = 4321;
+    int userbal2 = 25000;
+    
+    Atm user;
+    
+    bool isIdValid = true;
+    int aid = 0;
+    while(isIdValid){
+            cout <<"Enter User Id: ";
+            cin>> aid;
+            switch(aid){
+                case 123456:
+                user.setvalues(123456,1234,50000);
+                isIdValid = false;
+                break;
+                
+                case 654321:
+                user.setvalues(654321,4321,25000);
+                isIdValid = false;
+                break;
+                
+                case 0:
+                isIdValid = false;
+                exit(0);
+                
+                default:
+                cout << "Invalid User Id! Try again."<<endl;
+                cout << "Type 0 to exit."<<endl;
+                break;
+            }
+            
+    }
+    
+
+    if(user.authorization()){
+        
+        bool lvar = true;
+        
+        do{
+            switch(user.options()){
+                case 1:
+                user.checkBalance();
+                break;
+                
+                case 2:
+                user.withdrawCash();
+                break;
+                
+                case 3:
+                user.depositCash();
+                break;
+                
+                case 4:
+                lvar = false;
+                break;
+                
+                default:
+                cout << "Invalid option!! Try again"<< endl;
+                break;
+            }
+        }while(lvar);
+        
+    }
+    return 0;
+}
